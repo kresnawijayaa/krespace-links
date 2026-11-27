@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 
@@ -22,7 +24,7 @@ git pull --ff-only origin main
 docker compose -p krespace-links up -d --build affiliate
 
 for ((attempt = 1; attempt <= 15; attempt++)); do
-  if docker exec caddy_server wget -q -O /dev/null http://krespace-links-app:3000/healthz; then
+  if docker exec caddy_server wget -q -T 5 -O /dev/null http://krespace-links-app:3000/healthz; then
     printf 'KresPace sudah diperbarui ke %s dan bisa dijangkau Caddy.\n' "$(git rev-parse --short HEAD)"
     exit 0
   fi
