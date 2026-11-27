@@ -15,13 +15,12 @@ export function catalog(products, current = 1, pages = 1, search = '') {
     const url = new URL(product.url)
     const image = product.image_url
       ? `<img src="${escape(product.image_url)}" alt="" loading="lazy" width="70" height="70">`
-      : '＋'
+      : ''
     return `<li><a class="product" href="${escape(url.href)}" rel="sponsored noopener noreferrer" target="_blank">
 <span class="number" aria-label="Produk nomor ${product.number}">${number(product.number)}</span>
 <span class="thumb" aria-hidden="true">${image}</span>
-<span class="product-info"><strong>${escape(product.title)}</strong><small>${escape(url.hostname)}</small>
-${product.description ? `<small class="description">${escape(product.description)}</small>` : ''}</span>
-<span class="arrow" aria-hidden="true">↗</span></a></li>`
+<span class="product-info"><strong>${escape(product.title)}</strong><small>${escape(url.hostname)}</small></span>
+<span class="arrow" aria-hidden="true"></span></a></li>`
   }).join('')
   function pageUrl(index) {
     const params = new URLSearchParams()
