@@ -62,7 +62,7 @@ export function panel(products, selected = {}, error, notice) {
     `<label>${label}<input name="${key}" type="${type}" value="${escape(selected[key])}" ${attrs}></label>`).join('')
   const rows = products.map(product =>
     `<li><span><strong>${number(product.number)}</strong> · ${escape(product.title)}${product.hidden ? ' <small>(Disembunyikan)</small>' : ''}</span>
-<div class="actions"><a href="/admin/products/${product.id}">Edit</a>
+<div class="actions product-actions"><a class="secondary" href="/admin/products/${product.id}">Edit</a>
 <form method="post" action="/admin/products/${product.id}/${product.hidden ? 'show' : 'hide'}"><button class="secondary">${product.hidden ? 'Tampilkan' : 'Sembunyikan'}</button></form></div></li>`).join('')
   return page('Kelola produk', `<div class="admin-heading"><h1 class="admin-title">Kelola produk</h1>
 <form method="post" action="/admin/logout"><button class="secondary">Keluar</button></form></div>
@@ -70,9 +70,10 @@ ${notice ? `<p role="status">${escape(notice)}</p>` : ''}
 <section><h2>${editing ? 'Edit produk' : 'Tambah produk'}</h2>
 ${editing ? `<p>Nomor produk <strong>${number(selected.number)}</strong></p>` : '<p>Nomor produk diberikan otomatis saat disimpan.</p>'}
 ${error ? `<p class="error" role="alert">${escape(error)}</p>` : ''}
-<form class="editor" data-product-form method="post" action="/admin/products${editing ? '/' + escape(selected.id) : ''}">
+<form class="editor" data-product-form method="post" action="/admin">
+${editing ? `<input type="hidden" name="id" value="${escape(selected.id)}">` : ''}
 ${fields}<small role="status" data-preview-status>Tempel tautan Shopee untuk mengisi preview otomatis.</small>
-<div class="actions"><button>Simpan</button>${editing ? '<a href="/admin">Batal</a>' : ''}</div></form>
+<div class="actions editor-actions"><button>Simpan</button>${editing ? '<button type="button" class="secondary" data-clear-product hidden>Kosongkan semua isian</button><a href="/admin">Batal</a>' : ''}</div></form>
 </section>
 <section><h2>Daftar produk</h2>${rows ? `<ul class="admin-list">${rows}</ul>` : '<p>Belum ada produk.</p>'}</section>
 <script src="/admin/form.js" defer></script>`)

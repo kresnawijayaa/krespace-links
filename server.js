@@ -168,15 +168,15 @@ async function handle(req, res) {
     const selected = rows.find(product => product.id === productRoute[1])
     return selected ? send(res, 200, panel(rows, selected)) : message(res, 404, 'Produk tidak ditemukan', 'Periksa kembali alamat produk.')
   }
-  if (req.method !== 'POST' || (!productRoute && pathname !== '/admin/products')) return message(res, 404, 'Halaman tidak ditemukan', 'Periksa kembali alamat yang kamu buka.')
-  const id = productRoute?.[1]
+  if (req.method !== 'POST' || (!productRoute && pathname !== '/admin' && pathname !== '/admin/products')) return message(res, 404, 'Halaman tidak ditemukan', 'Periksa kembali alamat yang kamu buka.')
   if (productRoute?.[2]) {
-    const result = await db.query('UPDATE products SET hidden=$1 WHERE id::text=$2', [productRoute[2] === 'hide', id])
+    const result = await db.query('UPDATE products SET hidden=$1 WHERE id::text=$2', [productRoute[2] === 'hide', productRoute[1]])
     if (!result.rowCount) return message(res, 404, 'Produk tidak ditemukan', 'Periksa kembali alamat produk.')
     return redirect(res, '/admin')
   }
   const fields = await form(req)
   if (!fields) return message(res, 400, 'Form tidak dapat dibaca', 'Kembali ke admin dan coba lagi.')
+  const id = productRoute?.[1] ?? fields.get('id')
   const rows = id ? await products() : null
   const existing = rows?.find(product => product.id === id)
   if (id && !existing) return message(res, 404, 'Produk tidak ditemukan', 'Periksa kembali alamat produk.')

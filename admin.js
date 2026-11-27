@@ -44,3 +44,13 @@ urlField.addEventListener('input', () => {
   const url = urlField.value.trim()
   if (/^https:\/\//i.test(url) && urlField.validity.valid) timer = setTimeout(() => loadPreview(url), 350)
 })
+
+const clearButton = form.querySelector('[data-clear-product]')
+if (clearButton) {
+  clearButton.hidden = false
+  clearButton.addEventListener('click', () => {
+    for (const name of ['url', ...Object.values(fields)]) form.elements[name].value = ''
+    urlField.dispatchEvent(new Event('input'))
+    urlField.focus()
+  })
+}
