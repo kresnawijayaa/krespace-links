@@ -1,8 +1,8 @@
 ﻿# Krespace · Katalog affiliate
 
-Katalog publik di `/` dan panel pengelolaan di `/admin`. Nomor produk unik, diurutkan dari kecil ke besar, dan tampil dengan minimal dua digit. Di admin, isi nomor, judul, URL affiliate, dan bila ada URL langsung ke gambar produk. Preview publik menampilkan judul, domain tautan, dan gambar jika diisi. Gunakan URL gambar HTTPS saat situs berjalan dengan HTTPS.
+Katalog publik di `/` dan panel pengelolaan di `/admin`. Nomor diberikan otomatis saat menyimpan produk baru dan ditampilkan dengan minimal dua digit. Sembunyikan produk untuk mengeluarkannya dari katalog dan hasil pencarian. Tampilkan kembali dari panel admin dengan nomor yang sama.
 
-Untuk tautan HTTPS Shopee Indonesia, kosongkan URL gambar agar aplikasi mencoba membaca metadata preview saat produk disimpan. Produk tetap tersimpan jika Shopee tidak menyediakan preview. Untuk produk yang sudah ada, buka Edit dan simpan ulang untuk mencoba pengambilan gambar, atau isi URL gambar langsung.
+Tempel tautan HTTPS Shopee Indonesia untuk mengisi judul, gambar, dan deskripsi yang masih kosong. Semua kolom preview bisa diedit. Jika judul otomatis tidak tersedia, isi judul sebelum menyimpan. Gunakan URL gambar HTTPS saat situs berjalan dengan HTTPS.
 
 ## Siapkan Neon
 

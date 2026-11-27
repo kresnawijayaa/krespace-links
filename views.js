@@ -54,24 +54,26 @@ ${error ? `<p class="error" role="alert">${escape(error)}</p>` : ''}
 export function panel(products, selected = {}, error, notice) {
   const editing = Boolean(selected.id)
   const fields = [
-    ['number', 'Nomor produk', 'number', 'min="1" max="999999" required'],
-    ['title', 'Judul produk', 'text', 'maxlength="160"'],
     ['url', 'Tautan affiliate', 'url', 'maxlength="4096" required'],
+    ['title', 'Judul produk', 'text', 'maxlength="160"'],
     ['image_url', 'URL gambar preview (opsional)', 'url', 'maxlength="4096"'],
     ['description', 'Deskripsi preview (opsional)', 'text', 'maxlength="500"']
   ].map(([key, label, type, attrs]) =>
     `<label>${label}<input name="${key}" type="${type}" value="${escape(selected[key])}" ${attrs}></label>`).join('')
   const rows = products.map(product =>
-    `<li><span><strong>${number(product.number)}</strong> · ${escape(product.title)}</span><a href="/admin/products/${product.id}">Edit</a></li>`).join('')
+    `<li><span><strong>${number(product.number)}</strong> · ${escape(product.title)}${product.hidden ? ' <small>(Disembunyikan)</small>' : ''}</span>
+<div class="actions"><a href="/admin/products/${product.id}">Edit</a>
+<form method="post" action="/admin/products/${product.id}/${product.hidden ? 'show' : 'hide'}"><button class="secondary">${product.hidden ? 'Tampilkan' : 'Sembunyikan'}</button></form></div></li>`).join('')
   return page('Kelola produk', `<div class="admin-heading"><h1 class="admin-title">Kelola produk</h1>
 <form method="post" action="/admin/logout"><button class="secondary">Keluar</button></form></div>
 ${notice ? `<p role="status">${escape(notice)}</p>` : ''}
 <section><h2>${editing ? 'Edit produk' : 'Tambah produk'}</h2>
+${editing ? `<p>Nomor produk <strong>${number(selected.number)}</strong></p>` : '<p>Nomor produk diberikan otomatis saat disimpan.</p>'}
 ${error ? `<p class="error" role="alert">${escape(error)}</p>` : ''}
-<form class="editor" method="post" action="/admin/products${editing ? '/' + escape(selected.id) : ''}">
-${fields}<small>Untuk tautan Shopee, kolom judul, gambar, dan deskripsi yang kosong akan dicoba diisi otomatis saat disimpan.</small>
+<form class="editor" data-product-form method="post" action="/admin/products${editing ? '/' + escape(selected.id) : ''}">
+${fields}<small role="status" data-preview-status>Tempel tautan Shopee untuk mengisi preview otomatis.</small>
 <div class="actions"><button>Simpan</button>${editing ? '<a href="/admin">Batal</a>' : ''}</div></form>
-${editing ? `<details><summary>Hapus produk</summary><form method="post" action="/admin/products/${escape(selected.id)}/delete">
-<p>Produk ini akan dihapus dari katalog.</p><button class="danger">Ya, hapus produk</button></form></details>` : ''}</section>
-<section><h2>Daftar produk</h2>${rows ? `<ul class="admin-list">${rows}</ul>` : '<p>Belum ada produk.</p>'}</section>`)
+</section>
+<section><h2>Daftar produk</h2>${rows ? `<ul class="admin-list">${rows}</ul>` : '<p>Belum ada produk.</p>'}</section>
+<script src="/admin/form.js" defer></script>`)
 }
